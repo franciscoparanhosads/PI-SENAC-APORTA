@@ -19,7 +19,7 @@ app = FastAPI(
         "pessoais. Este serviço apenas informa e simula dados — nunca "
         "recomenda a compra ou venda de ativos."
     ),
-    version="0.1.0",
+    version="0.2.0",
 )
 
 # CORS: só a origem do front-end configurada no .env pode chamar esta API.

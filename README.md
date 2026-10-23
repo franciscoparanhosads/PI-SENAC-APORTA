@@ -13,6 +13,8 @@ nenhum ativo (restrição da CVM para plataformas que não são consultorias
 registradas). Todos os dados exibidos são fictícios, criados apenas para fins de
 demonstração acadêmica.
 
+As mudanças de cada versão estão em [CHANGELOG.md](CHANGELOG.md).
+
 ## Pré-requisitos
 
 - Python 3.11 ou superior instalado.
@@ -113,7 +115,11 @@ internet (a brapi.dev é simulada). O que eles verificam:
 ```
 projeto-integrador/
 ├── README.md
+├── CHANGELOG.md      — notas de atualização
+├── iniciar-tudo.bat
 ├── backend/          — API em FastAPI + SQLite
+│   ├── instalar.bat
+│   ├── rodar-testes.bat
 │   ├── main.py
 │   ├── database.py
 │   ├── models.py
@@ -121,7 +127,8 @@ projeto-integrador/
 │   ├── auth.py
 │   ├── quotes_service.py
 │   ├── seed.py
-│   └── routers/
+│   ├── routers/
+│   └── tests/        — testes automatizados (pytest)
 └── frontend/         — HTML + CSS + JavaScript puro
     ├── index.html      (login)
     ├── painel.html
