@@ -1,0 +1,12 @@
+fastapi==0.120.0
+uvicorn[standard]==0.38.0
+sqlalchemy==2.0.44
+pydantic[email]==2.12.3
+python-jose[cryptography]==3.5.0
+passlib[bcrypt]==1.7.4
+bcrypt==4.0.1
+python-dotenv==1.1.1
+httpx==0.28.1
+
+# Testes automatizados (pasta tests/)
+pytest==8.4.2

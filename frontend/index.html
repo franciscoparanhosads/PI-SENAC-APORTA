@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aporta — Entrar</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap">
+<link rel="stylesheet" href="css/estilo.css">
+<style>
+  body { display: flex; min-height: 100vh; }
+  .painel-esquerdo {
+    width: 44%;
+    min-width: 380px;
+    background: var(--dark);
+    color: var(--dark-text);
+    padding: 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .painel-direito {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+  }
+  .form-box { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 24px; }
+  .feature-item { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--dark-text-muted); }
+  .feature-icon {
+    width: 28px; height: 28px; border-radius: 8px; background: rgba(111,207,158,0.16);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .persona-buttons { display: flex; flex-direction: column; gap: 8px; }
+  .persona-btn {
+    text-align: left; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border);
+    background: var(--surface); cursor: pointer; font-size: 13px; color: var(--ink);
+  }
+  .persona-btn:hover { border-color: var(--accent); }
+  .divider { display: flex; align-items: center; gap: 12px; }
+  .divider-line { flex-grow: 1; height: 1px; background: var(--border); }
+
+  /* Celular: painel escuro vira um cabeçalho em cima do formulário */
+  @media (max-width: 760px) {
+    body { flex-direction: column; }
+    .painel-esquerdo { width: 100%; min-width: 0; padding: 32px 20px; gap: 24px; }
+    .painel-esquerdo h1 { font-size: 28px !important; }
+    .painel-direito { padding: 32px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="painel-esquerdo">
+  <div class="brand" style="color: var(--dark-text);">
+    <div class="brand-dot" style="background:#6FCF9E;"></div>
+    <span class="disp">Aporta</span>
+  </div>
+
+  <div style="display:flex; flex-direction:column; gap:28px;">
+    <h1 class="disp" style="font-size: 38px; line-height: 1.2; max-width: 380px;">Seus investimentos, organizados em um só lugar.</h1>
+    <p style="margin:0; font-size:15px; line-height:1.6; color: var(--dark-text-muted); max-width: 380px;">
+      Protótipo acadêmico — Projeto Integrador. Os dados exibidos são fictícios e a
+      plataforma apenas informa e simula, nunca recomenda investimentos.
+    </p>
+    <div style="display:flex; flex-direction:column; gap:16px; margin-top:12px;">
+      <div class="feature-item">
+        <div class="feature-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6FCF9E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+        Patrimônio consolidado em um só lugar
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6FCF9E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+        Cotações atualizadas automaticamente
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6FCF9E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+        Simulador de independência financeira
+      </div>
+    </div>
+  </div>
+
+  <span style="font-size:13px; color:#7C8A81;">Projeto Integrador — Centro Universitário Senac · 2026</span>
+</div>
+
+<div class="painel-direito">
+  <div class="form-box">
+    <div>
+      <h2 class="disp" style="font-size: 26px;">Bem-vindo de volta</h2>
+      <p style="margin:6px 0 0; font-size:14px; color: var(--ink-muted);">Entre para acompanhar seu patrimônio.</p>
+    </div>
+
+    <form id="login-form" style="display:flex; flex-direction:column; gap:16px;">
+      <label>
+        E-mail
+        <input type="email" id="email" placeholder="voce@email.com" required autocomplete="username">
+      </label>
+      <label>
+        Senha
+        <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password" minlength="6">
+      </label>
+      <div class="error-msg" id="login-error"></div>
+      <button type="submit" class="btn-primary" id="login-btn">Entrar</button>
+    </form>
+
+    <div class="divider">
+      <div class="divider-line"></div>
+      <span style="font-size:12px; color: var(--ink-faint);">contas de demonstração</span>
+      <div class="divider-line"></div>
+    </div>
+
+    <div class="persona-buttons">
+      <button type="button" class="persona-btn" data-email="juliana@aporta.com" data-password="juliana123">
+        <strong>Juliana Souza</strong> — perfil iniciante (juliana@aporta.com)
+      </button>
+      <button type="button" class="persona-btn" data-email="miguel@aporta.com" data-password="miguel123">
+        <strong>Miguel Almeida</strong> — perfil intermediário (miguel@aporta.com)
+      </button>
+      <button type="button" class="persona-btn" data-email="jessica@aporta.com" data-password="jessica123">
+        <strong>Jéssica Mendes</strong> — perfil avançado (jessica@aporta.com)
+      </button>
+    </div>
+    <p style="margin:0; font-size:12px; color: var(--ink-faint);">
+      Clique em uma conta acima para preencher o formulário automaticamente (senha
+      correspondente: ex. <code>juliana123</code>).
+    </p>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/login.js"></script>
+</body>
+</html>

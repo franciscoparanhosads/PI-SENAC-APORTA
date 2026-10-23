@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aporta — Simulador de independência financeira</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap">
+<link rel="stylesheet" href="css/estilo.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<style>
+  .sim-grid { display:flex; gap:24px; flex-wrap: wrap; align-items: flex-start; }
+  .sim-form { width: 100%; max-width: 380px; display:flex; flex-direction:column; gap:18px; }
+  .sim-resultado { flex: 1; min-width: 320px; display:flex; flex-direction:column; gap:20px; }
+  .resultado-topo { display:flex; align-items:center; gap:28px; flex-wrap: wrap; }
+  .divisor-vertical { width:1px; height:44px; background: rgba(246,244,239,0.18); }
+  #grafico-linha-wrap { height: 220px; }
+
+  @media (max-width: 600px) {
+    .sim-resultado { min-width: 0; flex-basis: 100%; }
+    .resultado-topo { gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="brand"><div class="brand-dot"></div><span class="disp">Aporta</span></div>
+    <nav class="nav-links">
+      <a href="painel.html">Painel</a>
+      <a href="cadastro.html">Ativos</a>
+      <a href="simulador.html" class="active">Simulador</a>
+    </nav>
+  </div>
+  <button class="avatar" id="avatar-btn" title="Sair">--</button>
+</div>
+
+<div class="page-content">
+  <div class="page-title-block">
+    <h1 class="disp">Simulador de independência financeira</h1>
+    <p>Ajuste o aporte mensal e a taxa esperada para ver quando você chega lá.</p>
+  </div>
+
+  <div class="sim-grid">
+    <form id="sim-form" class="card sim-form">
+      <label>
+        Patrimônio atual (R$)
+        <input type="number" id="current_amount" min="0" step="0.01" required>
+      </label>
+      <label>
+        Aporte mensal (R$)
+        <input type="number" id="monthly_contribution" min="0" step="0.01" required>
+      </label>
+      <label>
+        Taxa de retorno esperada ao ano (%)
+        <input type="number" id="annual_return_rate" min="0.1" max="100" step="0.1" value="9.5" required>
+      </label>
+      <label>
+        Meta de patrimônio (R$)
+        <input type="number" id="goal_amount" min="1" step="0.01" required>
+      </label>
+      <div class="error-msg" id="sim-error"></div>
+      <button type="submit" class="btn-primary" id="sim-btn">Calcular projeção</button>
+    </form>
+
+    <div class="sim-resultado">
+      <div class="card-dark resultado-topo" id="resultado-card">
+        <div style="display:flex; flex-direction:column; gap:4px;">
+          <span style="font-size:13px; color: var(--dark-text-muted);">Você atinge sua meta em</span>
+          <span class="disp" id="resultado-tempo" style="font-size:30px;">—</span>
+        </div>
+        <div class="divisor-vertical"></div>
+        <div style="display:flex; flex-direction:column; gap:4px;">
+          <span style="font-size:13px; color: var(--dark-text-muted);">Meta</span>
+          <span id="resultado-meta" style="font-size:17px; font-weight:700;">—</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span style="font-size:14px; font-weight:700;">Evolução projetada do patrimônio</span>
+        <div id="grafico-linha-wrap" style="margin-top:12px;">
+          <canvas id="grafico-linha"></canvas>
+        </div>
+        <p id="aviso-nao-alcancavel" class="error-msg" style="margin-top:8px;"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/simulador.js"></script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aporta — Adicionar ativo</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap">
+<link rel="stylesheet" href="css/estilo.css">
+<style>
+  .cadastro-grid { display:flex; gap:24px; flex-wrap: wrap; align-items: flex-start; }
+  .form-card { width: 100%; max-width: 620px; display:flex; flex-direction:column; gap: 18px; }
+  .lista-card { flex: 1; min-width: 280px; }
+  .chips-row { display:flex; gap:10px; flex-wrap: wrap; }
+  .campos-duplos { display:flex; gap:16px; flex-wrap: wrap; }
+  .campos-duplos label { flex: 1; min-width: 180px; }
+  .sugestoes-tickers { font-size: 12px; color: var(--ink-faint); margin-top: -8px; }
+  .item-cadastrado { display:flex; justify-content:space-between; padding-bottom:12px; border-bottom:1px solid var(--border-soft); align-items:flex-start; }
+  .item-cadastrado:last-child { border-bottom:none; padding-bottom:0; }
+  .btn-remover { background:none; border:none; color: var(--rust); font-size:12px; cursor:pointer; padding:0; }
+
+  @media (max-width: 600px) {
+    .lista-card, .campos-duplos label { min-width: 0; flex-basis: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="brand"><div class="brand-dot"></div><span class="disp">Aporta</span></div>
+    <nav class="nav-links">
+      <a href="painel.html">Painel</a>
+      <a href="cadastro.html" class="active">Ativos</a>
+      <a href="simulador.html">Simulador</a>
+    </nav>
+  </div>
+  <button class="avatar" id="avatar-btn" title="Sair">--</button>
+</div>
+
+<div class="page-content">
+  <div class="page-title-block">
+    <h1 class="disp">Adicionar novo ativo</h1>
+    <p>Escolha a classe, informe o código, a quantidade e o valor aportado.</p>
+  </div>
+
+  <div class="cadastro-grid">
+    <div class="card form-card">
+      <div>
+        <label style="margin-bottom:8px;">Classe do ativo</label>
+        <div class="chips-row" id="chips-classe">
+          <button type="button" class="class-chip selected" data-classe="renda_fixa">Renda Fixa</button>
+          <button type="button" class="class-chip" data-classe="fii">FIIs</button>
+          <button type="button" class="class-chip" data-classe="acao">Ações</button>
+          <button type="button" class="class-chip" data-classe="cripto">Cripto</button>
+        </div>
+      </div>
+
+      <form id="asset-form" style="display:flex; flex-direction:column; gap:16px;">
+        <label>
+          Código do ativo
+          <input type="text" id="code" placeholder="Ex: PETR4, HGLG11, TESOURO-SELIC-2029, BTC" required maxlength="30">
+        </label>
+        <p class="sugestoes-tickers" id="dica-tickers">
+          Dica: PETR4, MGLU3, VALE3 e ITUB4 têm cotação em tempo real. Qualquer outro
+          código recebe uma cotação simulada.
+        </p>
+
+        <label>
+          Nome de exibição
+          <input type="text" id="name" placeholder="Ex: Petrobras PN" required maxlength="120">
+        </label>
+
+        <div class="campos-duplos">
+          <label>
+            Quantidade
+            <input type="number" id="quantity" min="0.00000001" step="any" placeholder="0" required>
+          </label>
+          <label>
+            Valor aportado (R$)
+            <input type="number" id="amount" min="0.01" step="0.01" placeholder="0,00" required>
+          </label>
+        </div>
+
+        <label>
+          Data do aporte
+          <input type="date" id="purchase_date" required>
+        </label>
+
+        <div class="error-msg" id="form-error"></div>
+        <div class="success-msg" id="form-success"></div>
+        <button type="submit" class="btn-primary" id="submit-btn">Adicionar à carteira</button>
+      </form>
+    </div>
+
+    <div class="card lista-card">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;">
+        <span style="font-size:14px; font-weight:700;">Ativos já cadastrados</span>
+        <span id="contador-ativos" style="font-size:12px; color: var(--ink-faint);">—</span>
+      </div>
+      <div id="lista-ativos" style="display:flex; flex-direction:column; gap:12px;">
+        <p class="loading-state">Carregando...</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/cadastro.js"></script>
+</body>
+</html>
