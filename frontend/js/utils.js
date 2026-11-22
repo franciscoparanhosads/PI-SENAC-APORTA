@@ -57,14 +57,17 @@ function hojeISO() {
   return `${d.getFullYear()}-${mes}-${dia}`;
 }
 
-/** Preenche o avatar com as iniciais do usuário e faz o clique nele sair da conta. */
+function logout() {
+  clearSession();                        // apaga aporta_token e aporta_user
+  window.location.replace("index.html"); // replace: o "voltar" não retorna ao painel
+}
+
+/** Preenche o avatar com as iniciais do usuário e liga o botão "Sair". */
 function setupTopbar() {
   const user = getUserInfo();
   const avatarBtn = document.getElementById("avatar-btn");
   if (user) avatarBtn.textContent = initials(user.userName);
-  avatarBtn.addEventListener("click", () => {
-    clearSession();
-    window.location.href = "index.html";
-  });
+  const logoutBtn = document.getElementById("logout-btn");
+  if (logoutBtn) logoutBtn.addEventListener("click", logout);
   return user;
 }

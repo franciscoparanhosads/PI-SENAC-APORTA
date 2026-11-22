@@ -236,3 +236,16 @@ tbody tr:last-child td { border-bottom: none; }
 @media (max-width: 420px) {
   .topbar .brand .disp { display: none; } /* na topbar fica só a bolinha da marca */
 }
+
+.topbar-right { display: flex; align-items: center; gap: 12px; }
+.btn-sair {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--ink-muted);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-sair:hover { border-color: var(--accent); color: var(--accent); }
