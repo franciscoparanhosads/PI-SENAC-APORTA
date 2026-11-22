@@ -176,3 +176,8 @@ projeto-integrador/
 Este é um protótipo acadêmico e não deve ser usado com dados reais de
 investimentos nem exposto publicamente na internet sem revisão adicional de
 segurança.
+## Vídeo de Demonstração
+
+Assista à apresentação e demonstração do funcionamento da plataforma Aporta:
+
+https://senacspedu-my.sharepoint.com/:v:/g/personal/larissa_msoliveira2_senacsp_edu_br/IQAQZ8wb6S7eRqy6iEQlVraGAdY9Iz3sU3OqEstSN2uY-RA?e=BpLxtI&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D
