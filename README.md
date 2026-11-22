@@ -147,4 +147,4 @@ segurança.
 
 Assista à apresentação e demonstração do funcionamento da plataforma Aporta:
 
-[▶️ Assistir ao vídeo de demonstração do Aporta](https://senacspedu-my.sharepoint.com/personal/larissa_msoliveira2_senacsp_edu_br/_layouts/15/stream.aspx?id=%2Fpersonal%2Flarissa%5Fmsoliveira2%5Fsenacsp%5Fedu%5Fbr%2FDocuments%2FSite%20Aporta%2Emp4&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&ga=1&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2Ee8070ea8%2Df494%2D47bc%2Dbab1%2D4656fe4f734f&mode=View)
+https://senacspedu-my.sharepoint.com/:v:/g/personal/larissa_msoliveira2_senacsp_edu_br/IQAQZ8wb6S7eRqy6iEQlVraGAdY9Iz3sU3OqEstSN2uY-RA?e=BpLxtI&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D
