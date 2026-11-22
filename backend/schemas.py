@@ -58,6 +58,7 @@ class AssetOut(BaseModel):
 # ---------- Cotações ----------
 
 class QuoteOut(BaseModel):
+    asset_id: int  # id do ativo cadastrado: dois aportes no mesmo código têm cotações distintas
     code: str
     price: float
     change_percent: float

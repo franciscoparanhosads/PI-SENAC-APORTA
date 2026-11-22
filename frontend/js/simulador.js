@@ -12,12 +12,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 async function preencherPatrimonioAtual() {
   try {
     const [assets, quotes] = await Promise.all([Api.listAssets(), Api.getQuotes()]);
-    const quoteByCode = {};
-    quotes.forEach((q) => { quoteByCode[q.code] = q; });
+    const quoteByAssetId = {};
+    quotes.forEach((q) => { quoteByAssetId[q.asset_id] = q; });
 
     let total = 0;
     assets.forEach((asset) => {
-      const quote = quoteByCode[asset.code];
+      const quote = quoteByAssetId[asset.id];
       const price = quote ? quote.price : asset.amount_invested / asset.quantity;
       total += price * asset.quantity;
     });

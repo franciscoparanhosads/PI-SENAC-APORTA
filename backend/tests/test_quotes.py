@@ -103,3 +103,15 @@ def test_rota_devolve_uma_cotacao_por_ativo_do_usuario(client, ana, bruno, brapi
     assert por_codigo["HGLG11"]["is_real_time"] is False
     # simulado em torno do preço médio pago: 1600 / 10 = 160
     assert 157.6 <= por_codigo["HGLG11"]["price"] <= 162.4
+
+
+def test_dois_aportes_no_mesmo_ativo_simulado_tem_cotacoes_proprias(client, ana):
+    barato = criar_ativo(ana["user"].id, code="HGLG11", quantity=10, amount_invested=1000)  # base 100
+    caro = criar_ativo(ana["user"].id, code="HGLG11", quantity=10, amount_invested=2000)  # base 200
+
+    cotacoes = client.get("/quotes", headers=ana["headers"]).json()
+    por_id = {c["asset_id"]: c for c in cotacoes}
+
+    assert set(por_id) == {barato.id, caro.id}
+    assert 98.5 <= por_id[barato.id]["price"] <= 101.5
+    assert 197.0 <= por_id[caro.id]["price"] <= 203.0

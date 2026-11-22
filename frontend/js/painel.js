@@ -24,15 +24,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 function renderPainel(assets, quotes) {
-  const quoteByCode = {};
-  quotes.forEach((q) => { quoteByCode[q.code] = q; });
+  // Uma cotação por ativo cadastrado (não por código): dois aportes no mesmo
+  // ativo simulado têm preços-base diferentes e não podem compartilhar cotação.
+  const quoteByAssetId = {};
+  quotes.forEach((q) => { quoteByAssetId[q.asset_id] = q; });
 
   let total = 0;
   let totalInvested = 0;
   const totalsByClass = { renda_fixa: 0, fii: 0, acao: 0, cripto: 0 };
 
   const enriched = assets.map((asset) => {
-    const quote = quoteByCode[asset.code];
+    const quote = quoteByAssetId[asset.id];
     const priceNow = quote ? quote.price : asset.amount_invested / asset.quantity;
     const currentValue = priceNow * asset.quantity;
     total += currentValue;

@@ -28,6 +28,7 @@ def get_quotes_for_my_assets(
         quote = get_quote(asset.code, base_price)
         quotes.append(
             QuoteOut(
+                asset_id=asset.id,
                 code=quote["code"],
                 price=quote["price"],
                 change_percent=quote["change_percent"],

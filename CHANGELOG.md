@@ -4,6 +4,35 @@ Registro das mudanças do protótipo Aporta.
 
 ---
 
+## Versão 0.2.1 — 22/11/2026
+
+### 🐛 Correções de bugs
+
+- **Dois aportes no mesmo ativo usavam a mesma cotação.** O painel e o simulador guardavam uma cotação por código, então, ao cadastrar dois aportes no mesmo ativo simulado (ex.: HGLG11 em datas e preços diferentes), os dois eram avaliados com a cotação do último. Agora a rota `/quotes` devolve também o `asset_id` e o front-end associa cada cotação ao ativo cadastrado, não ao código. Ativos com cotação real (PETR4, MGLU3, VALE3, ITUB4) não eram afetados. Novo teste em `test_quotes.py` (total: 49 testes).
+
+---
+
+## Não lançado — atualizado em 22/11/2026
+
+Botão "Sair", novo logotipo e estilos organizados em arquivos próprios. Nenhum arquivo do back-end foi alterado nestes commits, e os 48 testes automatizados continuam passando. Ainda sem número de versão: ao fechar a próxima, renomeie esta seção e atualize o `version` em `backend/main.py`.
+
+### 🖥️ Interface
+
+- **Botão "Sair" na barra superior** (painel, ativos e simulador). Antes, a única forma de sair da conta era clicar no avatar com as iniciais, sem nada na tela indicando isso. Agora o botão fica ao lado do avatar. O avatar não faz mais logout: o título dele mudou de "Sair" para "Seu perfil" e, por enquanto, o clique não abre nada.
+- Ao sair, o navegador usa `location.replace`, então o botão "voltar" não retorna ao painel depois do logout.
+- **Novo logotipo** em `frontend/assets/logo.svg`, usado como ícone da aba (favicon) em todas as telas: login, painel, ativos e simulador.
+
+### 🧹 Organização do código
+
+- Os estilos que ficavam dentro de `<style>` em cada página foram movidos para arquivos próprios em `frontend/css/`: `index.css`, `painel.css`, `simulador.css` e `cadastro.css`. São as mesmas regras, então a aparência não muda. As páginas HTML ficaram bem mais curtas.
+- A função `logout()` foi separada em `frontend/js/utils.js`, e o `setupTopbar()` passou a ligar o botão "Sair" no lugar do clique no avatar.
+
+### 📝 Documentação
+
+- README: nova seção **"Vídeo de Demonstração"**, com o link da apresentação da plataforma.
+
+---
+
 ## Versão 0.2.0 — 23/10/2026
 
 Revisão geral do protótipo: correções de segurança e de bugs, suporte a celular,
