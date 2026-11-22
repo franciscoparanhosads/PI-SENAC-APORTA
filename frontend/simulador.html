@@ -4,22 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Aporta — Simulador de independência financeira</title>
+<link rel="shortcut icon" href="./assets/logo.svg" type="image/x-icon">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap">
 <link rel="stylesheet" href="css/estilo.css">
+<link rel="stylesheet" href="./css/simulador.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
-<style>
-  .sim-grid { display:flex; gap:24px; flex-wrap: wrap; align-items: flex-start; }
-  .sim-form { width: 100%; max-width: 380px; display:flex; flex-direction:column; gap:18px; }
-  .sim-resultado { flex: 1; min-width: 320px; display:flex; flex-direction:column; gap:20px; }
-  .resultado-topo { display:flex; align-items:center; gap:28px; flex-wrap: wrap; }
-  .divisor-vertical { width:1px; height:44px; background: rgba(246,244,239,0.18); }
-  #grafico-linha-wrap { height: 220px; }
-
-  @media (max-width: 600px) {
-    .sim-resultado { min-width: 0; flex-basis: 100%; }
-    .resultado-topo { gap: 16px; }
-  }
-</style>
 </head>
 <body>
 
