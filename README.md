@@ -20,47 +20,60 @@ As mudanças de cada versão estão em [CHANGELOG.md](CHANGELOG.md).
 - Python 3.11 ou superior instalado.
 - Um navegador (Chrome, Firefox, Edge...).
 
-## Jeito rápido (Windows)
+## Como rodar
+
+O back-end (API) também serve o front-end, então tudo sobe junto em
+`http://localhost:8000`. Não é preciso um segundo servidor, e o Chart.js já vem na
+pasta do projeto (`frontend/js/`), então os gráficos funcionam sem internet.
+
+### Jeito mais rápido (macOS, Linux e Windows)
+
+Na pasta raiz do projeto (a que contém o `run.py`), **na primeira vez**:
+
+```bash
+python3 -m venv backend/venv
+source backend/venv/bin/activate        # Windows (PowerShell): backend\venv\Scripts\Activate.ps1
+pip install -r backend/requirements.txt
+python run.py
+```
+
+Nas próximas vezes, basta ativar o ambiente virtual e rodar:
+
+```bash
+source backend/venv/bin/activate        # Windows (PowerShell): backend\venv\Scripts\Activate.ps1
+python run.py
+```
+
+O `run.py` cria o `.env` (com uma chave secreta aleatória) e o banco com as 3
+personas se ainda não existirem, sobe a API e o front-end e abre o navegador.
+Para parar, aperte `Ctrl + C` no terminal.
+
+> O ambiente virtual (`venv`) é necessário no macOS e em Linux recentes: o sistema
+> bloqueia a instalação global de pacotes com o erro `externally-managed-environment`.
+
+### Jeito rápido (Windows, com dois cliques)
 
 1. Dê dois cliques em `backend\instalar.bat` (só na primeira vez): cria o
    ambiente virtual, instala as dependências, gera o `.env` e popula o banco.
-2. Dê dois cliques em `iniciar-tudo.bat`: abre a API, o front-end e o navegador.
+2. Dê dois cliques em `iniciar-tudo.bat`: inicia o sistema e abre o navegador.
 
-Se preferir fazer manualmente (ou estiver no Linux/macOS), siga os passos abaixo.
+### Manualmente (com recarga automática)
 
-## Como rodar o back-end (API)
+Útil durante o desenvolvimento: o servidor reinicia sozinho quando você edita o
+código. A partir da pasta raiz:
 
 ```bash
 cd backend
 python -m venv venv
 source venv/bin/activate        # Windows (PowerShell): venv\Scripts\Activate.ps1
 pip install -r requirements.txt
-cp .env.example .env            # depois, abra o .env e ajuste se quiser
+python gerar_env.py             # cria o .env com uma chave secreta aleatória
 python seed.py                  # cria o banco e popula com as 3 personas
 uvicorn main:app --reload
 ```
 
-A API sobe em `http://localhost:8000`. A documentação interativa (Swagger) fica em
+Depois abra `http://localhost:8000`. A documentação interativa (Swagger) fica em
 `http://localhost:8000/docs` — dá para testar todos os endpoints por lá também.
-
-## Como rodar o front-end
-
-Em outro terminal (deixe o back-end rodando):
-
-```bash
-cd frontend
-python -m http.server 5500
-```
-
-Depois abra `http://localhost:5500/index.html` no navegador.
-
-> Alternativa: se estiver usando o VS Code, a extensão **Live Server** também
-> funciona — clique com o botão direito em `frontend/index.html` e escolha
-> "Open with Live Server".
-
-Se você mudar a porta do front-end, atualize também `FRONTEND_ORIGIN` no arquivo
-`backend/.env` (usado na configuração de CORS) para o front continuar conseguindo
-chamar a API.
 
 ## Credenciais de teste (as 3 personas do projeto)
 
@@ -116,10 +129,12 @@ internet (a brapi.dev é simulada). O que eles verificam:
 projeto-integrador/
 ├── README.md
 ├── CHANGELOG.md      — notas de atualização
+├── run.py            — sobe tudo com um comando (qualquer sistema)
 ├── iniciar-tudo.bat
-├── backend/          — API em FastAPI + SQLite
+├── backend/          — API em FastAPI + SQLite (também serve o front-end)
 │   ├── instalar.bat
 │   ├── rodar-testes.bat
+│   ├── gerar_env.py    — cria o .env com chave secreta aleatória
 │   ├── main.py
 │   ├── database.py
 │   ├── models.py
@@ -135,7 +150,7 @@ projeto-integrador/
     ├── cadastro.html
     ├── simulador.html
     ├── css/
-    └── js/
+    └── js/             (inclui o Chart.js local)
 ```
 
 ## Aviso

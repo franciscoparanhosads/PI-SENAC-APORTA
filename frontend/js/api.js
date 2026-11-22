@@ -5,7 +5,8 @@
  * resposta 401 (sessão expirada/token inválido) mandando o usuário de volta
  * para o login. Nenhuma outra tela deve montar `fetch` na mão.
  */
-const API_BASE_URL = "http://localhost:8000";
+
+const API_BASE_URL = window.location.port === "8000" ? "" : "http://localhost:8000";
 
 function getToken() {
   return sessionStorage.getItem("aporta_token");

@@ -29,8 +29,8 @@ pip install -r requirements.txt
 if errorlevel 1 goto erro
 
 if not exist ".env" (
-    echo Criando o arquivo .env a partir do .env.example...
-    copy .env.example .env >nul
+    echo Criando o arquivo .env com uma chave secreta aleatoria...
+    python gerar_env.py
 )
 
 echo Populando o banco de dados...

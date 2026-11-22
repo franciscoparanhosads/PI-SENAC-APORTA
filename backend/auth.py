@@ -43,6 +43,11 @@ def hash_password(plain_password: str) -> str:
     return pwd_context.hash(plain_password)
 
 
+# Hash de uma senha qualquer, calculado uma vez ao iniciar. Usado no login quando
+# o e-mail não existe, para o tempo de resposta ser igual ao de um e-mail válido.
+DUMMY_PASSWORD_HASH = pwd_context.hash("senha-falsa-apenas-para-gastar-tempo")
+
+
 def verify_password(plain_password: str, password_hash: str) -> bool:
     return pwd_context.verify(plain_password, password_hash)
 

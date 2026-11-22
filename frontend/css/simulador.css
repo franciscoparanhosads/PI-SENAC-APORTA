@@ -1,0 +1,11 @@
+.sim-grid { display:flex; gap:24px; flex-wrap: wrap; align-items: flex-start; }
+  .sim-form { width: 100%; max-width: 380px; display:flex; flex-direction:column; gap:18px; }
+  .sim-resultado { flex: 1; min-width: 320px; display:flex; flex-direction:column; gap:20px; }
+  .resultado-topo { display:flex; align-items:center; gap:28px; flex-wrap: wrap; }
+  .divisor-vertical { width:1px; height:44px; background: rgba(246,244,239,0.18); }
+  #grafico-linha-wrap { height: 220px; }
+
+  @media (max-width: 600px) {
+    .sim-resultado { min-width: 0; flex-basis: 100%; }
+    .resultado-topo { gap: 16px; }
+  }
