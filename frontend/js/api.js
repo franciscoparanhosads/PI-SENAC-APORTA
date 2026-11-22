@@ -50,7 +50,9 @@ async function apiRequest(path, { method = "GET", body = null, auth = true } = {
     body: body ? JSON.stringify(body) : undefined,
   });
 
-  if (response.status === 401) {
+  // 401 em rota protegida = sessão expirada. No /login (auth: false) o 401 só
+  // significa "e-mail ou senha inválidos" e a mensagem deve aparecer na tela.
+  if (response.status === 401 && auth) {
     clearSession();
     window.location.href = "index.html";
     throw new Error("Sessão expirada. Faça login novamente.");
@@ -60,7 +62,12 @@ async function apiRequest(path, { method = "GET", body = null, auth = true } = {
     let detail = "Ocorreu um erro ao falar com o servidor.";
     try {
       const errorBody = await response.json();
-      detail = errorBody.detail || detail;
+      if (Array.isArray(errorBody.detail)) {
+        // Erro de validação (422) do FastAPI: lista de { loc, msg, ... }.
+        detail = errorBody.detail.map((e) => e.msg).join(" ") || detail;
+      } else if (typeof errorBody.detail === "string") {
+        detail = errorBody.detail;
+      }
     } catch (_) {
       /* resposta sem corpo JSON — mantém a mensagem padrão */
     }

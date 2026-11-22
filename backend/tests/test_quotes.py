@@ -103,3 +103,31 @@ def test_rota_devolve_uma_cotacao_por_ativo_do_usuario(client, ana, bruno, brapi
     assert por_codigo["HGLG11"]["is_real_time"] is False
     # simulado em torno do preço médio pago: 1600 / 10 = 160
     assert 157.6 <= por_codigo["HGLG11"]["price"] <= 162.4
+
+
+def test_rota_dois_lotes_do_mesmo_codigo_tem_um_unico_preco(client, ana, brapi_no_ar):
+    # dois lotes do mesmo FII, com preços médios diferentes (100 e 200)
+    criar_ativo(ana["user"].id, code="HGLG11", quantity=10, amount_invested=1000)
+    criar_ativo(ana["user"].id, code="HGLG11", quantity=10, amount_invested=2000)
+
+    cotacoes = client.get("/quotes", headers=ana["headers"]).json()
+
+    assert len(cotacoes) == 1  # uma cotação por código
+    # base = preço médio ponderado: 3000 / 20 = 150 (±1,5%)
+    assert 147.75 <= cotacoes[0]["price"] <= 152.25
+
+
+def test_brapi_fora_do_ar_nao_e_consultada_de_novo_logo_em_seguida(monkeypatch):
+    chamadas = []
+
+    def get_falso(url, **kwargs):
+        chamadas.append(url)
+        raise httpx.ConnectError("brapi.dev fora do ar")
+
+    monkeypatch.setattr(quotes_service.httpx, "get", get_falso)
+
+    for _ in range(3):
+        cotacao = quotes_service.get_quote("PETR4", 0)
+        assert cotacao["is_real_time"] is False
+
+    assert len(chamadas) == 1  # as demais usaram o fallback sem esperar o timeout

@@ -27,10 +27,18 @@ app = FastAPI(
 # CORS: só a origem do front-end configurada no .env pode chamar esta API.
 # allow_credentials=False porque a autenticação vai no header Authorization
 # (Bearer), não em cookies — então não há credenciais de navegador a liberar.
-frontend_origin = os.getenv("FRONTEND_ORIGIN", "http://localhost:5500")
+# FRONTEND_ORIGIN aceita várias origens separadas por vírgula; por padrão libera
+# tanto "localhost" quanto "127.0.0.1" (o navegador trata os dois como origens
+# diferentes).
+DEFAULT_ORIGINS = "http://localhost:5500,http://127.0.0.1:5500"
+frontend_origins = [
+    origem.strip().rstrip("/")
+    for origem in os.getenv("FRONTEND_ORIGIN", DEFAULT_ORIGINS).split(",")
+    if origem.strip()
+]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[frontend_origin],
+    allow_origins=frontend_origins,
     allow_credentials=False,
     allow_methods=["GET", "POST", "DELETE"],
     allow_headers=["Authorization", "Content-Type"],

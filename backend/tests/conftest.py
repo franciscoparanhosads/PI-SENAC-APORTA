@@ -43,6 +43,7 @@ def sem_internet(monkeypatch):
     """Garante que nenhum teste chame a brapi.dev de verdade e limpa o cache
     de cotações entre um teste e outro."""
     quotes_service._cache.clear()
+    quotes_service._failed_until.clear()
 
     def chamada_bloqueada(*args, **kwargs):
         raise AssertionError("Teste tentou acessar a internet (brapi.dev).")
@@ -50,6 +51,7 @@ def sem_internet(monkeypatch):
     monkeypatch.setattr(quotes_service.httpx, "get", chamada_bloqueada)
     yield
     quotes_service._cache.clear()
+    quotes_service._failed_until.clear()
 
 
 @pytest.fixture

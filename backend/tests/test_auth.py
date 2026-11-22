@@ -102,3 +102,12 @@ def test_token_de_usuario_que_nao_existe_mais_e_bloqueado(client):
 
     resposta = client.get("/assets", headers={"Authorization": f"Bearer {token}"})
     assert resposta.status_code == 401
+
+
+def test_cors_aceita_localhost_e_127_0_0_1(client):
+    for origem in ("http://localhost:5500", "http://127.0.0.1:5500"):
+        resposta = client.options(
+            "/login",
+            headers={"Origin": origem, "Access-Control-Request-Method": "POST"},
+        )
+        assert resposta.headers.get("access-control-allow-origin") == origem

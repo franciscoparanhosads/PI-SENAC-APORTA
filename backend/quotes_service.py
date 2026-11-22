@@ -36,6 +36,12 @@ FALLBACK_PRICES = {
 _cache: dict[str, dict] = {}
 _CACHE_TTL_SECONDS = 60
 
+# Quando a brapi.dev falha, guardamos até quando NÃO devemos tentar de novo.
+# Sem isso, cada requisição esperaria o timeout (5s) de cada ticker enquanto a
+# API estiver fora do ar.
+_failed_until: dict[str, float] = {}
+_FAILURE_BACKOFF_SECONDS = 60
+
 
 def _get_cached(code: str) -> dict | None:
     entry = _cache.get(code)
@@ -48,11 +54,29 @@ def _set_cache(code: str, data: dict) -> None:
     _cache[code] = {"data": data, "fetched_at": time.time()}
 
 
+def _fallback_quote(code: str) -> dict:
+    """Último valor válido em cache (mesmo vencido) ou o valor fixo. Em ambos os
+    casos o preço NÃO é atual, então is_real_time vai como False."""
+    stale = _cache.get(code)
+    if stale is not None:
+        return {**stale["data"], "is_real_time": False}
+    return {
+        "code": code,
+        "price": FALLBACK_PRICES.get(code, 0.0),
+        "change_percent": 0.0,
+        "is_real_time": False,
+    }
+
+
 def fetch_real_quote(code: str) -> dict:
     """Consulta a brapi.dev para um dos 4 tickers gratuitos, com cache e fallback."""
     cached = _get_cached(code)
     if cached is not None:
         return cached
+
+    # A brapi falhou há pouco: não tenta de novo agora, usa o fallback direto.
+    if time.time() < _failed_until.get(code, 0.0):
+        return _fallback_quote(code)
 
     params = {}
     if BRAPI_TOKEN:
@@ -70,21 +94,13 @@ def fetch_real_quote(code: str) -> dict:
             "is_real_time": True,
         }
         _set_cache(code, data)
+        _failed_until.pop(code, None)
         return data
     except (httpx.HTTPError, KeyError, IndexError, ValueError, TypeError):
         # brapi.dev fora do ar, resposta inesperada, etc. — nunca deixamos a
-        # tela quebrar: devolvemos o último valor válido em cache (mesmo
-        # vencido) ou o valor de fallback fixo. Em ambos os casos o preço NÃO
-        # é atual, então is_real_time vai como False (a tela mostra "simulado").
-        stale = _cache.get(code)
-        if stale is not None:
-            return {**stale["data"], "is_real_time": False}
-        return {
-            "code": code,
-            "price": FALLBACK_PRICES.get(code, 0.0),
-            "change_percent": 0.0,
-            "is_real_time": False,
-        }
+        # tela quebrar, e só voltamos a tentar depois do período de espera.
+        _failed_until[code] = time.time() + _FAILURE_BACKOFF_SECONDS
+        return _fallback_quote(code)
 
 
 def mock_quote(code: str, base_price: float) -> dict:

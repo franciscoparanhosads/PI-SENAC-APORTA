@@ -4,6 +4,17 @@ Registro das mudanças do protótipo Aporta.
 
 ---
 
+## Revisão 2 — 21/11/2026
+
+- **Login:** a mensagem "E-mail ou senha inválidos" voltou a aparecer (antes a página recarregava e a mensagem sumia).
+- **Erros de validação** da API agora aparecem como texto legível, em vez de "[object Object]".
+- **Cotações:** uma cotação por código, com preço médio ponderado dos lotes — o mesmo ticker não tem mais preços diferentes.
+- **brapi.dev fora do ar:** após uma falha, a API espera 60 s antes de tentar de novo, evitando telas lentas.
+- **CORS:** `FRONTEND_ORIGIN` aceita várias origens separadas por vírgula; por padrão libera `localhost:5500` e `127.0.0.1:5500`.
+- Adicionado `.gitignore` na raiz (`.DS_Store`, `.vscode/`, etc.) e 3 testes novos (51 no total).
+
+---
+
 ## Versão 0.2.0 — 23/10/2026
 
 Revisão geral do protótipo: correções de segurança e de bugs, suporte a celular,
