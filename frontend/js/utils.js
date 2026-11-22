@@ -57,14 +57,20 @@ function hojeISO() {
   return `${d.getFullYear()}-${mes}-${dia}`;
 }
 
-/** Preenche o avatar com as iniciais do usuário e faz o clique nele sair da conta. */
+/** Preenche o avatar com as iniciais do usuário e faz o botão "Sair" encerrar a sessão.
+ *  Tolerante a falhas: se algum elemento da barra não existir, o resto da tela
+ *  (carregar ativos, painel etc.) continua funcionando. */
 function setupTopbar() {
   const user = getUserInfo();
-  const avatarBtn = document.getElementById("avatar-btn");
-  if (user) avatarBtn.textContent = initials(user.userName);
-  avatarBtn.addEventListener("click", () => {
-    clearSession();
-    window.location.href = "index.html";
-  });
+  const avatar = document.getElementById("avatar");
+  if (avatar && user) avatar.textContent = initials(user.userName);
+
+  const logoutBtn = document.getElementById("logout-btn");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+      clearSession();
+      window.location.href = "index.html";
+    });
+  }
   return user;
 }

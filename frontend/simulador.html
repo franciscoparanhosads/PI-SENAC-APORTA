@@ -6,9 +6,9 @@
 <link rel="shortcut icon" href="./assets/logo.svg" type="image/x-icon">
 <title>Aporta — Simulador de independência financeira</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap">
-<link rel="stylesheet" href="./css/estilo.css">
-<link rel="stylesheet" href="./css/simulador.css">
-<script src="js/chart.umd.min.js"></script>
+<link rel="stylesheet" href="./css/estilo.css?v=0.2.1">
+<link rel="stylesheet" href="./css/simulador.css?v=0.2.1">
+<script src="js/chart.umd.min.js?v=0.2.1"></script>
 
 </head>
 <body>
@@ -22,7 +22,10 @@
       <a href="simulador.html" class="active">Simulador</a>
     </nav>
   </div>
-  <button class="avatar" id="avatar-btn" title="Sair">--</button>
+  <div class="user-area">
+    <span class="avatar" id="avatar" title="Sua conta">--</span>
+    <button class="btn-sair" id="logout-btn" type="button">Sair</button>
+  </div>
 </div>
 
 <div class="page-content">
@@ -77,8 +80,8 @@
   </div>
 </div>
 
-<script src="js/api.js"></script>
-<script src="js/utils.js"></script>
-<script src="js/simulador.js"></script>
+<script src="js/api.js?v=0.2.1"></script>
+<script src="js/utils.js?v=0.2.1"></script>
+<script src="js/simulador.js?v=0.2.1"></script>
 </body>
 </html>

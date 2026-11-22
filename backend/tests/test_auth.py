@@ -111,3 +111,9 @@ def test_cors_aceita_localhost_e_127_0_0_1(client):
             headers={"Origin": origem, "Access-Control-Request-Method": "POST"},
         )
         assert resposta.headers.get("access-control-allow-origin") == origem
+
+
+def test_frontend_e_servido_sem_cache(client):
+    resposta = client.get("/painel.html")
+    assert resposta.status_code == 200
+    assert resposta.headers["cache-control"] == "no-cache"

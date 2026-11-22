@@ -32,7 +32,7 @@ function renderPainel(assets, quotes) {
   const totalsByClass = { renda_fixa: 0, fii: 0, acao: 0, cripto: 0 };
 
   const enriched = assets.map((asset) => {
-    const quote = quoteByCode[asset.code];
+    const quote = quoteByCode[asset.code.toUpperCase()];
     const priceNow = quote ? quote.price : asset.amount_invested / asset.quantity;
     const currentValue = priceNow * asset.quantity;
     total += currentValue;

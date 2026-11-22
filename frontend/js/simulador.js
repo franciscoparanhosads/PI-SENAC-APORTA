@@ -17,7 +17,7 @@ async function preencherPatrimonioAtual() {
 
     let total = 0;
     assets.forEach((asset) => {
-      const quote = quoteByCode[asset.code];
+      const quote = quoteByCode[asset.code.toUpperCase()];
       const price = quote ? quote.price : asset.amount_invested / asset.quantity;
       total += price * asset.quantity;
     });

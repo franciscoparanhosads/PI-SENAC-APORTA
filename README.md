@@ -88,7 +88,7 @@ o formulário automaticamente.
 
 ## Testes automatizados
 
-O back-end tem 48 testes automatizados (pasta `backend/tests/`, com `pytest`).
+O back-end tem 52 testes automatizados (pasta `backend/tests/`, com `pytest`).
 No Windows, basta dar dois cliques em `backend\rodar-testes.bat`. Ou, no terminal,
 com o ambiente virtual ativado:
 

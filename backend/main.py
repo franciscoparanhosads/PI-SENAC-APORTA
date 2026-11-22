@@ -21,7 +21,7 @@ app = FastAPI(
         "pessoais. Este serviço apenas informa e simula dados — nunca "
         "recomenda a compra ou venda de ativos."
     ),
-    version="0.2.0",
+    version="0.2.2",
 )
 
 # CORS: só a origem do front-end configurada no .env pode chamar esta API.
@@ -55,7 +55,17 @@ def health_check():
     return {"status": "ok"}
 
 
+class FrontendFiles(StaticFiles):
+    """Serve o front-end com "no-cache": o navegador sempre confere se há versão
+    nova, então atualizar os arquivos do projeto não deixa telas antigas em cache."""
+
+    async def get_response(self, path, scope):
+        response = await super().get_response(path, scope)
+        response.headers["Cache-Control"] = "no-cache"
+        return response
+
+
 # Serve o front-end pelo próprio back-end (http://localhost:8000).
 FRONTEND_DIR = Path(__file__).resolve().parent.parent / "frontend"
 if FRONTEND_DIR.is_dir():
-    app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")
+    app.mount("/", FrontendFiles(directory=FRONTEND_DIR, html=True), name="frontend")

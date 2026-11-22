@@ -4,14 +4,90 @@ Registro das mudanças do protótipo Aporta.
 
 ---
 
-## Revisão 2 — 21/11/2026
+## Versão 0.2.2 — 21/11/2026
 
-- **Login:** a mensagem "E-mail ou senha inválidos" voltou a aparecer (antes a página recarregava e a mensagem sumia).
-- **Erros de validação** da API agora aparecem como texto legível, em vez de "[object Object]".
-- **Cotações:** uma cotação por código, com preço médio ponderado dos lotes — o mesmo ticker não tem mais preços diferentes.
-- **brapi.dev fora do ar:** após uma falha, a API espera 60 s antes de tentar de novo, evitando telas lentas.
-- **CORS:** `FRONTEND_ORIGIN` aceita várias origens separadas por vírgula; por padrão libera `localhost:5500` e `127.0.0.1:5500`.
-- Adicionado `.gitignore` na raiz (`.DS_Store`, `.vscode/`, etc.) e 3 testes novos (51 no total).
+Correções de bugs encontrados na revisão do código, botão "Sair" e proteção
+contra telas antigas em cache.
+
+### 🆕 Novidades
+
+- **Botão "Sair"** na barra superior das telas Painel, Ativos e Simulador. O círculo
+  com as iniciais agora só identifica o usuário (antes ele mesmo era o botão de sair).
+- Adicionado `.gitignore` na raiz do projeto (`.DS_Store`, `.vscode/`, `__pycache__/`,
+  `.env`, `venv/`, `aporta.db`).
+
+### 🐛 Correções
+
+- **Login:** a mensagem "E-mail ou senha inválidos" voltou a aparecer. Antes, a página
+  recarregava e a mensagem sumia.
+- **Erros de validação** da API aparecem como texto legível, em vez de "[object Object]".
+- **Cotações:** passou a existir uma cotação por código, com o preço médio ponderado dos
+  lotes. Antes, dois lotes do mesmo ticker podiam ser avaliados por preços diferentes.
+- **brapi.dev fora do ar:** após uma falha, a API espera 60 s antes de tentar de novo,
+  evitando telas lentas (até 20 s por requisição).
+- **Tela Ativos presa em "Carregando...":** a barra superior não derruba mais o resto da
+  página se faltar algum elemento (isso acontecia ao misturar arquivos de versões diferentes).
+- O painel e o simulador encontram a cotação mesmo se o código do ativo estiver em
+  minúsculas no banco.
+
+### ⚙️ Configuração
+
+- **CORS:** `FRONTEND_ORIGIN` aceita várias origens separadas por vírgula. O padrão
+  libera `http://localhost:5500` e `http://127.0.0.1:5500`. Quem já tem um `backend/.env`
+  com uma origem só precisa editá-lo para liberar a segunda.
+- **Cache:** o servidor envia o front-end com `Cache-Control: no-cache`, e os arquivos
+  CSS/JS levam `?v=0.2.1` nos links. Assim o navegador não mostra telas antigas depois
+  de atualizar o projeto. (Se o front for servido por `python -m http.server`, só o
+  `?v=` vale; troque o número a cada versão.)
+
+### 🧪 Testes
+
+- O back-end passou de 48 para **52 testes** (novos: lotes do mesmo código, espera após
+  falha da brapi.dev, CORS com as duas origens e front-end sem cache).
+
+---
+
+## Versão 0.2.1 — 21/11/2026
+
+Facilita a execução do protótipo em qualquer sistema e corrige uma falha de
+segurança no login.
+
+### 🔒 Segurança
+
+- **Corrigido o vazamento de usuários cadastrados pelo tempo de resposta do
+  login.** Com e-mail inexistente, a API respondia em ~0,003 s; com e-mail
+  existente, em ~0,226 s (o bcrypt só rodava quando o usuário existia). Dava para
+  descobrir quais e-mails estavam cadastrados cronometrando as respostas. Agora,
+  se o e-mail não existe, a senha é verificada contra um hash falso
+  (`DUMMY_PASSWORD_HASH`, em `auth.py`), e os dois casos levam o mesmo tempo.
+- **A chave `JWT_SECRET_KEY` agora é gerada aleatoriamente.** Antes, o
+  `instalar.bat` copiava o `.env.example` com a chave de exemplo (pública), e todas
+  as instalações acabavam usando a mesma. O novo `backend/gerar_env.py` cria o
+  `.env` com uma chave aleatória e não sobrescreve um `.env` existente.
+
+### ⚙️ Instalação e uso
+
+- **O back-end agora serve o front-end** (`StaticFiles`, em `main.py`). Tudo sobe
+  junto em `http://localhost:8000`, sem segundo servidor e sem depender de CORS. O
+  `api.js` usa caminho relativo na porta 8000 e mantém o endereço antigo
+  (`localhost:8000` com front na 5500) como alternativa.
+- **Novo `run.py` na raiz:** um comando (`python run.py`) cria o `.env` e o banco
+  com as 3 personas, sobe a API e o front-end e abre o navegador. Funciona em
+  Windows, macOS e Linux.
+- **Chart.js incluído no projeto** (`frontend/js/chart.umd.min.js`), em vez de
+  carregado de CDN. Os gráficos do painel e do simulador funcionam sem internet.
+- **Adicionado o `favicon.svg`**, que remove o aviso `404 /favicon.ico` do log.
+- README reescrito: passo a passo com ambiente virtual (necessário no macOS e em
+  Linux recentes, que bloqueiam a instalação global de pacotes), remoção da seção
+  do front-end em servidor separado e aviso de que abrir o `index.html` por duplo
+  clique (`file://`) não funciona.
+
+### 📌 Pendências conhecidas
+
+- O `iniciar-tudo.bat` ainda abre um servidor separado do front-end na porta 5500;
+  funciona, mas ficou redundante.
+- Continuam as pendências da versão 0.2.0 (valores em `Float`, sem cadastro de
+  usuário nem edição de ativo, cotação simulada que muda a cada recarregamento).
 
 ---
 
