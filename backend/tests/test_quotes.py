@@ -131,3 +131,27 @@ def test_brapi_fora_do_ar_nao_e_consultada_de_novo_logo_em_seguida(monkeypatch):
         assert cotacao["is_real_time"] is False
 
     assert len(chamadas) == 1  # as demais usaram o fallback sem esperar o timeout
+
+
+def test_erro_de_certificado_ssl_no_computador_nao_derruba_a_cotacao(monkeypatch):
+    # Caso real: o Python não achou o arquivo de certificados (FileNotFoundError)
+    def get_falso(url, **kwargs):
+        raise FileNotFoundError(2, "No such file or directory")
+
+    monkeypatch.setattr(quotes_service.httpx, "get", get_falso)
+
+    cotacao = quotes_service.get_quote("VALE3", 0)
+
+    assert cotacao["price"] == quotes_service.FALLBACK_PRICES["VALE3"]
+    assert cotacao["is_real_time"] is False
+
+
+def test_contexto_ssl_ignora_ssl_cert_file_quebrado(monkeypatch):
+    # Caso real (Mac): SSL_CERT_FILE aponta para um arquivo que não existe.
+    monkeypatch.setenv("SSL_CERT_FILE", "/caminho/que/nao/existe.pem")
+
+    contexto = quotes_service._criar_contexto_ssl()
+
+    assert contexto is not True  # usou o certifi, sem depender da variável
+    # o httpx aceita esse contexto sem tentar abrir o arquivo inexistente
+    httpx.Client(verify=contexto).close()

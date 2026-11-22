@@ -75,6 +75,24 @@ uvicorn main:app --reload
 Depois abra `http://localhost:8000`. A documentação interativa (Swagger) fica em
 `http://localhost:8000/docs` — dá para testar todos os endpoints por lá também.
 
+## Compatibilidade (Windows, macOS e Linux)
+
+O projeto foi feito para rodar igual em qualquer sistema: usa só Python (3.11 ou
+superior) e caminhos independentes de sistema operacional. Os testes automáticos
+rodam em Windows, macOS e Linux a cada envio ao GitHub (ver
+`.github/workflows/testes.yml`).
+
+Problemas comuns:
+
+- **`python` não encontrado (macOS/Linux):** use `python3` no lugar de `python`.
+- **PowerShell bloqueia o `Activate.ps1` (Windows):** rode uma vez
+  `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` e tente de novo.
+- **`externally-managed-environment` ao instalar pacotes:** crie e ative o ambiente
+  virtual (`venv`), como mostrado acima.
+- **Cotações aparecem como "simulado":** a consulta à brapi.dev falhou (sem
+  internet, por exemplo). O sistema continua funcionando; o motivo aparece como
+  aviso no terminal do back-end.
+
 ## Credenciais de teste (as 3 personas do projeto)
 
 | Persona | Perfil | E-mail | Senha |
@@ -88,7 +106,7 @@ o formulário automaticamente.
 
 ## Testes automatizados
 
-O back-end tem 52 testes automatizados (pasta `backend/tests/`, com `pytest`).
+O back-end tem 55 testes automatizados (pasta `backend/tests/`, com `pytest`).
 No Windows, basta dar dois cliques em `backend\rodar-testes.bat`. Ou, no terminal,
 com o ambiente virtual ativado:
 

@@ -107,3 +107,29 @@ def test_usuario_nao_consegue_remover_ativo_de_outra_pessoa(client, ana, bruno):
     assert resposta.status_code == 404
     lista_ana = client.get("/assets", headers=ana["headers"]).json()
     assert [a["id"] for a in lista_ana] == [ativo_da_ana.id]  # continua lá
+
+
+def test_erro_de_banco_ao_criar_ativo_devolve_mensagem_clara(client, ana, monkeypatch):
+    from sqlalchemy.exc import OperationalError
+    from sqlalchemy.orm import Session
+
+    def commit_com_erro(self):
+        raise OperationalError("INSERT", {}, Exception("database is locked"))
+
+    monkeypatch.setattr(Session, "commit", commit_com_erro)
+
+    resposta = client.post(
+        "/assets",
+        headers=ana["headers"],
+        json={
+            "asset_class": "fii",
+            "code": "HGLG11",
+            "name": "CSHG Logística FII",
+            "quantity": 1,
+            "amount_invested": 100,
+            "purchase_date": "2025-01-10",
+        },
+    )
+
+    assert resposta.status_code == 500
+    assert "banco de dados" in resposta.json()["detail"]

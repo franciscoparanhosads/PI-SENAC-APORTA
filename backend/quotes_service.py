@@ -10,8 +10,10 @@ diretamente com a brapi.dev).
   deixar a tela lenta, e um valor de fallback caso a API externa esteja fora
   do ar.
 """
+import logging
 import os
 import random
+import ssl
 import time
 
 import httpx
@@ -19,8 +21,27 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+logger = logging.getLogger("aporta")
+
 BRAPI_BASE_URL = "https://brapi.dev/api/quote"
 BRAPI_TOKEN = os.getenv("BRAPI_TOKEN", "").strip()
+
+
+
+def _criar_contexto_ssl():
+    """Contexto SSL com os certificados do pacote `certifi` (já instalado junto
+    com o httpx). Isso evita depender da configuração de certificados do
+    sistema/Python de cada computador — em alguns Macs, por exemplo, a variável
+    SSL_CERT_FILE aponta para um arquivo inexistente e quebraria a consulta."""
+    try:
+        import certifi
+
+        return ssl.create_default_context(cafile=certifi.where())
+    except Exception:  # noqa: BLE001
+        return True  # usa o padrão do httpx
+
+
+_SSL_VERIFY = _criar_contexto_ssl()
 
 REAL_TIME_TICKERS = {"PETR4", "MGLU3", "VALE3", "ITUB4"}
 
@@ -83,7 +104,9 @@ def fetch_real_quote(code: str) -> dict:
         params["token"] = BRAPI_TOKEN
 
     try:
-        response = httpx.get(f"{BRAPI_BASE_URL}/{code}", params=params, timeout=5.0)
+        response = httpx.get(
+            f"{BRAPI_BASE_URL}/{code}", params=params, timeout=5.0, verify=_SSL_VERIFY
+        )
         response.raise_for_status()
         payload = response.json()
         result = payload["results"][0]
@@ -96,9 +119,11 @@ def fetch_real_quote(code: str) -> dict:
         _set_cache(code, data)
         _failed_until.pop(code, None)
         return data
-    except (httpx.HTTPError, KeyError, IndexError, ValueError, TypeError):
-        # brapi.dev fora do ar, resposta inesperada, etc. — nunca deixamos a
-        # tela quebrar, e só voltamos a tentar depois do período de espera.
+    except Exception as erro:  # noqa: BLE001 — a cotação nunca pode derrubar a tela
+        # brapi.dev fora do ar, resposta inesperada, problema de certificado SSL
+        # ou de rede no computador, etc. — nunca deixamos a tela quebrar, e só
+        # voltamos a tentar depois do período de espera.
+        logger.warning("Não foi possível consultar a brapi.dev para %s: %r", code, erro)
         _failed_until[code] = time.time() + _FAILURE_BACKOFF_SECONDS
         return _fallback_quote(code)
 

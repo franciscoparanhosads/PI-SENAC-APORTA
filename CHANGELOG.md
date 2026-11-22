@@ -4,7 +4,82 @@ Registro das mudanças do protótipo Aporta.
 
 ---
 
+## Versão 0.2.5 — 22/11/2026
+
+Foco: o projeto rodar igual no computador de qualquer desenvolvedor (Windows, macOS e Linux).
+
+### 🆕 Novidades
+
+- **Testes automáticos em Windows, macOS e Linux** (GitHub Actions, com Python 3.11 e 3.14),
+  em `.github/workflows/testes.yml`.
+- `.gitattributes` para manter os fins de linha corretos em cada sistema (os `.bat`
+  continuam funcionando no Windows).
+- Seção **Compatibilidade** no README, com a solução dos problemas mais comuns.
+
+### 🐛 Correções
+
+- **Consulta de cotação independente do certificado SSL do computador:** o back-end agora
+  usa os certificados do pacote `certifi`. Isso corrige o caso em que o Python do Mac
+  procurava um arquivo de certificados inexistente (variável `SSL_CERT_FILE`) e as ações
+  reais ficavam "simuladas".
+
+### 🧪 Testes
+
+- O back-end passou de 54 para **55 testes** (novo: `SSL_CERT_FILE` quebrado).
+
+---
+
+## Versão 0.2.4 — 22/11/2026
+
+### 🐛 Correções
+
+- **Painel e simulador davam erro 500** quando o computador não conseguia achar o arquivo
+  de certificados SSL do Python (`FileNotFoundError` ao consultar a brapi.dev). Agora
+  qualquer falha ao consultar a cotação (rede, SSL, resposta inesperada) usa o valor de
+  reserva, marcado como "simulado", e o motivo aparece como aviso no terminal do
+  back-end.
+
+### 🧪 Testes
+
+- O back-end passou de 53 para **54 testes** (novo: erro de certificado SSL).
+
+---
+
+## Versão 0.2.3 — 21/11/2026
+
+### 🐛 Correções
+
+- **Erros do servidor mais fáceis de entender:** quando o servidor responde sem uma
+  mensagem (por exemplo, erro 500), a tela agora mostra o código do erro, como
+  "Ocorreu um erro ao falar com o servidor (código 500)".
+- **Adicionar ativo:** se o banco de dados falhar ao salvar, a tela mostra "Não foi
+  possível salvar no banco de dados" e o detalhe técnico aparece no terminal do
+  back-end. Antes só aparecia a mensagem genérica.
+
+### 🧪 Testes
+
+- O back-end passou de 52 para **53 testes** (novo: falha do banco ao criar ativo).
+
+---
+
 ## Versão 0.2.2 — 21/11/2026
+
+### 🆕 Novidades
+
+- **Simulador: máscara de moeda nos campos de valor** (patrimônio atual, aporte mensal e
+  meta). Ao digitar, os pontos de milhar aparecem automaticamente (`5000` vira `5.000`) e a
+  vírgula é usada para os centavos (`5.000,50`). Ao sair do campo, os centavos são
+  completados (`5.000` vira `5.000,00`). Os valores sugeridos pelo sistema já vêm
+  formatados e a edição no meio do número mantém o cursor no lugar.
+- O simulador avisa quando a meta está zerada, antes de chamar a API.
+
+### ⚙️ Configuração
+
+- Versão da API e dos links CSS/JS (`?v=`) atualizada para 0.2.2.
+
+---
+
+## Versão 0.2.1 — 21/11/2026
 
 Correções de bugs encontrados na revisão do código, botão "Sair" e proteção
 contra telas antigas em cache.
@@ -44,50 +119,6 @@ contra telas antigas em cache.
 
 - O back-end passou de 48 para **52 testes** (novos: lotes do mesmo código, espera após
   falha da brapi.dev, CORS com as duas origens e front-end sem cache).
-
----
-
-## Versão 0.2.1 — 21/11/2026
-
-Facilita a execução do protótipo em qualquer sistema e corrige uma falha de
-segurança no login.
-
-### 🔒 Segurança
-
-- **Corrigido o vazamento de usuários cadastrados pelo tempo de resposta do
-  login.** Com e-mail inexistente, a API respondia em ~0,003 s; com e-mail
-  existente, em ~0,226 s (o bcrypt só rodava quando o usuário existia). Dava para
-  descobrir quais e-mails estavam cadastrados cronometrando as respostas. Agora,
-  se o e-mail não existe, a senha é verificada contra um hash falso
-  (`DUMMY_PASSWORD_HASH`, em `auth.py`), e os dois casos levam o mesmo tempo.
-- **A chave `JWT_SECRET_KEY` agora é gerada aleatoriamente.** Antes, o
-  `instalar.bat` copiava o `.env.example` com a chave de exemplo (pública), e todas
-  as instalações acabavam usando a mesma. O novo `backend/gerar_env.py` cria o
-  `.env` com uma chave aleatória e não sobrescreve um `.env` existente.
-
-### ⚙️ Instalação e uso
-
-- **O back-end agora serve o front-end** (`StaticFiles`, em `main.py`). Tudo sobe
-  junto em `http://localhost:8000`, sem segundo servidor e sem depender de CORS. O
-  `api.js` usa caminho relativo na porta 8000 e mantém o endereço antigo
-  (`localhost:8000` com front na 5500) como alternativa.
-- **Novo `run.py` na raiz:** um comando (`python run.py`) cria o `.env` e o banco
-  com as 3 personas, sobe a API e o front-end e abre o navegador. Funciona em
-  Windows, macOS e Linux.
-- **Chart.js incluído no projeto** (`frontend/js/chart.umd.min.js`), em vez de
-  carregado de CDN. Os gráficos do painel e do simulador funcionam sem internet.
-- **Adicionado o `favicon.svg`**, que remove o aviso `404 /favicon.ico` do log.
-- README reescrito: passo a passo com ambiente virtual (necessário no macOS e em
-  Linux recentes, que bloqueiam a instalação global de pacotes), remoção da seção
-  do front-end em servidor separado e aviso de que abrir o `index.html` por duplo
-  clique (`file://`) não funciona.
-
-### 📌 Pendências conhecidas
-
-- O `iniciar-tudo.bat` ainda abre um servidor separado do front-end na porta 5500;
-  funciona, mas ficou redundante.
-- Continuam as pendências da versão 0.2.0 (valores em `Float`, sem cadastro de
-  usuário nem edição de ativo, cotação simulada que muda a cada recarregamento).
 
 ---
 

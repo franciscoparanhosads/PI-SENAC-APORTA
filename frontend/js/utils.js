@@ -57,6 +57,61 @@ function hojeISO() {
   return `${d.getFullYear()}-${mes}-${dia}`;
 }
 
+/**
+ * Máscara de moeda para campos de texto: enquanto o usuário digita, o campo
+ * ganha os pontos de milhar e aceita a vírgula para os centavos.
+ * Ex.: digitar 5000 mostra 5.000; digitar 5000,5 mostra 5.000,5.
+ */
+function formatarNumeroInput(valor) {
+  return Number(valor).toLocaleString("pt-BR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+}
+
+/** Converte o texto do campo ("5.000,50") em número (5000.5). Vazio vira 0. */
+function lerMoeda(texto) {
+  const numero = parseFloat(String(texto).replace(/\./g, "").replace(",", "."));
+  return Number.isFinite(numero) ? numero : 0;
+}
+
+/** Formata o texto digitado: pontos de milhar na parte inteira e até 2 casas depois da vírgula. */
+function mascararMoeda(texto) {
+  const temVirgula = texto.includes(",");
+  const [inteiroBruto, ...resto] = texto.replace(/[^\d,]/g, "").split(",");
+  const inteiro = inteiroBruto.replace(/^0+(?=\d)/, "").slice(0, 11); // sem zeros à esquerda
+  const comMilhar = inteiro.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  if (!temVirgula) return comMilhar;
+  const centavos = resto.join("").slice(0, 2);
+  return `${comMilhar || "0"},${centavos}`;
+}
+
+function aplicarMascaraMoeda(input) {
+  input.addEventListener("input", () => {
+    // guarda quantos dígitos/vírgula havia antes do cursor, para não pular o cursor para o fim
+    const antes = input.value.slice(0, input.selectionStart ?? input.value.length);
+    const posicao = antes.replace(/[^\d,]/g, "").length;
+
+    input.value = mascararMoeda(input.value);
+
+    let contados = 0;
+    let novaPosicao = input.value.length;
+    if (posicao === 0) novaPosicao = 0;
+    else {
+      for (let k = 0; k < input.value.length; k++) {
+        if (/[\d,]/.test(input.value[k])) contados++;
+        if (contados === posicao) { novaPosicao = k + 1; break; }
+      }
+    }
+    input.setSelectionRange(novaPosicao, novaPosicao);
+  });
+
+  // ao sair do campo, completa os centavos (5.000 vira 5.000,00)
+  input.addEventListener("blur", () => {
+    if (input.value) input.value = formatarNumeroInput(lerMoeda(input.value));
+  });
+}
+
 /** Preenche o avatar com as iniciais do usuário e faz o botão "Sair" encerrar a sessão.
  *  Tolerante a falhas: se algum elemento da barra não existir, o resto da tela
  *  (carregar ativos, painel etc.) continua funcionando. */

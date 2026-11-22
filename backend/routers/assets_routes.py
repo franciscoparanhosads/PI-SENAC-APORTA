@@ -1,10 +1,15 @@
+import logging
+
 from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from auth import get_current_user
 from database import get_db
 from models import Asset, User
 from schemas import AssetCreate, AssetOut
+
+logger = logging.getLogger("aporta")
 
 router = APIRouter(prefix="/assets", tags=["assets"])
 
@@ -36,9 +41,19 @@ def create_asset(
         amount_invested=payload.amount_invested,
         purchase_date=payload.purchase_date,
     )
-    db.add(asset)
-    db.commit()
-    db.refresh(asset)
+    try:
+        db.add(asset)
+        db.commit()
+        db.refresh(asset)
+    except SQLAlchemyError:
+        db.rollback()
+        # O detalhe técnico vai para o terminal do back-end; a tela mostra um
+        # texto claro (em vez de um "erro 500" sem explicação).
+        logger.exception("Falha ao salvar o ativo no banco de dados")
+        raise HTTPException(
+            status_code=500,
+            detail="Não foi possível salvar no banco de dados. Veja a mensagem no terminal do back-end.",
+        )
     return asset
 
 

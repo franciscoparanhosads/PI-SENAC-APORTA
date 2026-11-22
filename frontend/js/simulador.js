@@ -4,6 +4,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (!requireAuthOrRedirect()) return;
   setupTopbar();
 
+  document.querySelectorAll(".input-moeda").forEach(aplicarMascaraMoeda);
+
   await preencherPatrimonioAtual();
 
   document.getElementById("sim-form").addEventListener("submit", onSimulate);
@@ -22,11 +24,11 @@ async function preencherPatrimonioAtual() {
       total += price * asset.quantity;
     });
 
-    document.getElementById("current_amount").value = total.toFixed(2);
+    document.getElementById("current_amount").value = formatarNumeroInput(total);
     // meta padrão sugerida: 5x o patrimônio atual (ou R$ 500.000 se ainda não tem nada)
     const metaSugerida = total > 0 ? total * 5 : 500000;
-    document.getElementById("goal_amount").value = metaSugerida.toFixed(2);
-    document.getElementById("monthly_contribution").value = (total * 0.02 || 500).toFixed(2);
+    document.getElementById("goal_amount").value = formatarNumeroInput(metaSugerida);
+    document.getElementById("monthly_contribution").value = formatarNumeroInput(total * 0.02 || 500);
   } catch (_) {
     /* se falhar, o usuário simplesmente preenche os campos manualmente */
   }
@@ -41,11 +43,16 @@ async function onSimulate(event) {
   avisoBox.textContent = "";
 
   const payload = {
-    current_amount: parseFloat(document.getElementById("current_amount").value),
-    monthly_contribution: parseFloat(document.getElementById("monthly_contribution").value),
+    current_amount: lerMoeda(document.getElementById("current_amount").value),
+    monthly_contribution: lerMoeda(document.getElementById("monthly_contribution").value),
     annual_return_rate: parseFloat(document.getElementById("annual_return_rate").value),
-    goal_amount: parseFloat(document.getElementById("goal_amount").value),
+    goal_amount: lerMoeda(document.getElementById("goal_amount").value),
   };
+
+  if (payload.goal_amount <= 0) {
+    errorBox.textContent = "Informe uma meta de patrimônio maior que zero.";
+    return;
+  }
 
   submitBtn.disabled = true;
   submitBtn.textContent = "Calculando...";

@@ -6,9 +6,9 @@
 <link rel="shortcut icon" href="./assets/logo.svg" type="image/x-icon">
 <title>Aporta — Simulador de independência financeira</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap">
-<link rel="stylesheet" href="./css/estilo.css?v=0.2.1">
-<link rel="stylesheet" href="./css/simulador.css?v=0.2.1">
-<script src="js/chart.umd.min.js?v=0.2.1"></script>
+<link rel="stylesheet" href="./css/estilo.css?v=0.2.5">
+<link rel="stylesheet" href="./css/simulador.css?v=0.2.5">
+<script src="js/chart.umd.min.js?v=0.2.5"></script>
 
 </head>
 <body>
@@ -38,11 +38,11 @@
     <form id="sim-form" class="card sim-form">
       <label>
         Patrimônio atual (R$)
-        <input type="number" id="current_amount" min="0" step="0.01" required>
+        <input type="text" id="current_amount" class="input-moeda" inputmode="decimal" autocomplete="off" placeholder="0,00" required>
       </label>
       <label>
         Aporte mensal (R$)
-        <input type="number" id="monthly_contribution" min="0" step="0.01" required>
+        <input type="text" id="monthly_contribution" class="input-moeda" inputmode="decimal" autocomplete="off" placeholder="0,00" required>
       </label>
       <label>
         Taxa de retorno esperada ao ano (%)
@@ -50,7 +50,7 @@
       </label>
       <label>
         Meta de patrimônio (R$)
-        <input type="number" id="goal_amount" min="1" step="0.01" required>
+        <input type="text" id="goal_amount" class="input-moeda" inputmode="decimal" autocomplete="off" placeholder="0,00" required>
       </label>
       <div class="error-msg" id="sim-error"></div>
       <button type="submit" class="btn-primary" id="sim-btn">Calcular projeção</button>
@@ -80,8 +80,8 @@
   </div>
 </div>
 
-<script src="js/api.js?v=0.2.1"></script>
-<script src="js/utils.js?v=0.2.1"></script>
-<script src="js/simulador.js?v=0.2.1"></script>
+<script src="js/api.js?v=0.2.5"></script>
+<script src="js/utils.js?v=0.2.5"></script>
+<script src="js/simulador.js?v=0.2.5"></script>
 </body>
 </html>

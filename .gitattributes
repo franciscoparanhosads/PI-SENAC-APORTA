@@ -1,0 +1,5 @@
+# Fins de linha consistentes entre Windows, macOS e Linux.
+* text=auto
+*.bat text eol=crlf
+*.sh  text eol=lf
+*.py  text eol=lf

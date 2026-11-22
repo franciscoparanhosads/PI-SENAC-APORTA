@@ -59,7 +59,7 @@ async function apiRequest(path, { method = "GET", body = null, auth = true } = {
   }
 
   if (!response.ok) {
-    let detail = "Ocorreu um erro ao falar com o servidor.";
+    let detail = `Ocorreu um erro ao falar com o servidor (código ${response.status}).`;
     try {
       const errorBody = await response.json();
       if (Array.isArray(errorBody.detail)) {
